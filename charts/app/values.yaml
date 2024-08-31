@@ -67,7 +67,7 @@ redis:
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
-      size: 1Gi
+      size: 100Mi
       storageClass: netapp-block-standard
   sentinel:
     enabled: true
