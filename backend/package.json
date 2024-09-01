@@ -3,7 +3,6 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
-    "prisma-generate": "prisma generate",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -32,7 +31,6 @@
     "@nestjs/swagger": "^7.0.3",
     "@nestjs/terminus": "^10.2.1",
     "@nestjs/testing": "^10.0.0",
-    "@prisma/client": "^5.7.0",
     "dotenv": "^16.0.1",
     "express-prom-bundle": "^7.0.0",
     "helmet": "^7.0.0",
