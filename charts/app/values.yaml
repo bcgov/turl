@@ -62,6 +62,7 @@ redis:
   image:
     registry: artifacts.developer.gov.bc.ca/docker-remote
   master:
+    kind: Deployment
     podSecurityContext: {}
     containerSecurityContext: {}
     persistence:
