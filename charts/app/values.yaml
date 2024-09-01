@@ -76,5 +76,10 @@ redis:
     containerSecurityContext: {}
     image:
       registry: artifacts.developer.gov.bc.ca/docker-remote
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 100Mi
+      storageClass: netapp-block-standard
 
 
