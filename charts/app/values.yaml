@@ -56,6 +56,8 @@ backend:
     minAvailable: 1 # the minimum number of pods that must be available during the disruption budget.
 
 redis:
+  global:
+    storageClass: netapp-block-standard
   enabled: true
   auth:
     enabled: false
@@ -68,7 +70,7 @@ redis:
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
-      size: 100Mi
+      size: 200Mi
       storageClass: netapp-block-standard
     persistentVolumeClaimRetentionPolicy:
       enabled: true
