@@ -60,7 +60,7 @@ redis:
   auth:
     enabled: false
   image:
-    registry: artifacts.developer.gov.bc.ca/github-docker-remote
+    registry: artifacts.developer.gov.bc.ca/docker-remote
   master:
     podSecurityContext: {}
     containerSecurityContext: {}
@@ -75,6 +75,6 @@ redis:
     podSecurityContext: {}
     containerSecurityContext: {}
     image:
-      registry: artifacts.developer.gov.bc.ca/github-docker-remote
+      registry: artifacts.developer.gov.bc.ca/docker-remote
 
 
