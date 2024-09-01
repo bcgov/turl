@@ -77,7 +77,7 @@ redis:
       enabled: true
       whenDeleted: Delete
   sentinel:
-    enabled: true
+    enabled: false
     replicas: 2
     podSecurityContext: {}
     containerSecurityContext: {}
