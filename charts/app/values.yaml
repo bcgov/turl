@@ -85,6 +85,7 @@ redis:
           cpu: 20m
           memory: 50Mi
   replica:
+    kind:
     replicaCount: 2
     persistentVolumeClaimRetentionPolicy:
       enabled: true
