@@ -11,6 +11,8 @@ const redisConnectionFactory: FactoryProvider<Redis> = {
       sentinels: [
         { host: process.env.REDIS_HOST || "localhost", port:  26379 }
       ],
+      name: "mymaster",
+
     });
     redisInstance.on("connect", () => {
       console.log("Connected to Redis");
