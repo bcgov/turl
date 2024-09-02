@@ -56,7 +56,7 @@ backend:
     minAvailable: 1 # the minimum number of pods that must be available during the disruption budget.
 
 redis:
-  architecture: standalone
+  architecture: replication
   global:
     storageClass: netapp-block-standard
   enabled: true
@@ -65,7 +65,7 @@ redis:
   image:
     registry: artifacts.developer.gov.bc.ca/docker-remote
   master:
-    kind: Deployment
+    kind: StatefulSet
     updateStrategy:
       type: Recreate
     podSecurityContext: {}
@@ -85,16 +85,23 @@ redis:
           cpu: 20m
           memory: 50Mi
   replica:
+    replicaCount: 1
     persistentVolumeClaimRetentionPolicy:
       enabled: true
       whenDeleted: Delete
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
-      size: 200Mi
+      size: 100Mi
+    resources:
+      limits:
+        cpu: 50m
+        memory: 150Mi
+      requests:
+        cpu: 20m
+        memory: 50Mi
   sentinel:
-    enabled: false
-    replicas: 3
+    enabled: true
     podSecurityContext: {}
     containerSecurityContext: {}
     image:
@@ -102,7 +109,7 @@ redis:
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
-      size: 100Mi
+      size: 50Mi
       storageClass: netapp-block-standard
     persistentVolumeClaimRetentionPolicy:
       enabled: true
