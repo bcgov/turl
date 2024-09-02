@@ -6,11 +6,13 @@ import {AppService} from "./app.service";
 import {AppController} from "./app.controller";
 import {MetricsController} from "./metrics.controller";
 import {TerminusModule} from '@nestjs/terminus';
+import {RedisModule} from "./redis/redis.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TerminusModule,
+    RedisModule
   ],
   controllers: [AppController, MetricsController],
   providers: [AppService]

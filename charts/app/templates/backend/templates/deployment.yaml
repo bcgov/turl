@@ -39,6 +39,8 @@ spec:
           env:
             - name: LOG_LEVEL
               value: info
+            - name: REDIS_HOST
+              value: {{.Release.Name}}-redis
           ports:
             - name: http
               containerPort: {{ .Values.backend.service.targetPort }}
