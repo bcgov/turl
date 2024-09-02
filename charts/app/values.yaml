@@ -85,7 +85,7 @@ redis:
           cpu: 20m
           memory: 50Mi
   replica:
-    replicaCount: 1
+    replicaCount: 2
     persistentVolumeClaimRetentionPolicy:
       enabled: true
       whenDeleted: Delete
@@ -102,6 +102,7 @@ redis:
         memory: 50Mi
   sentinel:
     enabled: true
+    quorum: 1
     podSecurityContext: {}
     containerSecurityContext: {}
     image:
