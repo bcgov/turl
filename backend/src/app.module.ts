@@ -22,6 +22,9 @@ export class AppModule { // let's add a middleware on all routes
     consumer.apply(HTTPLoggerMiddleware).exclude({path: 'metrics', method: RequestMethod.ALL}, {
       path: 'health',
       method: RequestMethod.ALL
-    }).forRoutes('*');
+    },
+                                                 { path: '', method: RequestMethod.ALL}
+                                                   
+                                                ).forRoutes('*');
   }
 }
