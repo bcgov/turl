@@ -66,6 +66,7 @@ redis:
     registry: artifacts.developer.gov.bc.ca/docker-remote
   master:
     kind: StatefulSet
+    shareProcessNamespace: true
     updateStrategy:
       type: Recreate
     podSecurityContext: {}
@@ -86,6 +87,7 @@ redis:
           memory: 50Mi
   replica:
     kind:
+    shareProcessNamespace: true
     replicaCount: 2
     persistentVolumeClaimRetentionPolicy:
       enabled: true
