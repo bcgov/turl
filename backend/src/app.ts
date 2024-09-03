@@ -17,19 +17,18 @@ export async function bootstrap() {
   app.set("trust proxy", 1);
   app.use(metricsMiddleware);
   app.enableShutdownHooks();
-  app.setGlobalPrefix("api");
   app.enableVersioning({
     type: VersioningType.URI,
     prefix: "v",
   });
   const config = new DocumentBuilder()
-    .setTitle("Users example")
-    .setDescription("The user API description")
+    .setTitle("TURL")
+    .setDescription("Tiny URL as a Service")
     .setVersion("1.0")
-    .addTag("users")
+    .addTag("turl")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  SwaggerModule.setup("/api/docs", app, document);
   return app;
 }

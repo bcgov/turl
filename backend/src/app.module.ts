@@ -19,12 +19,19 @@ import {RedisModule} from "./redis/redis.module";
 })
 export class AppModule { // let's add a middleware on all routes
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HTTPLoggerMiddleware).exclude({path: 'metrics', method: RequestMethod.ALL}, {
-      path: 'health',
-      method: RequestMethod.ALL
-    },
-                                                 { path: '', method: RequestMethod.ALL}
-                                                   
-                                                ).forRoutes('*');
+    consumer.apply(HTTPLoggerMiddleware).exclude(
+      {
+        path: 'metrics',
+        method: RequestMethod.ALL
+      },
+      {
+        path: 'health',
+        method: RequestMethod.ALL
+      },
+      {
+        path: '',
+        method: RequestMethod.GET
+      }
+    ).forRoutes('*');
   }
 }

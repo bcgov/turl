@@ -1,7 +1,7 @@
 
 
 services:
-  redis-master:
+  redis:
     image: bitnami/redis:7.4.0-debian-12-r2
     container_name: redis
     ports: ["6379:6379"]
@@ -12,15 +12,16 @@ services:
       test: ["CMD", "redis-cli", "ping"]
     networks:
       - turl
-  redis-sentinel:
-    image: bitnami/redis-sentinel:7.4.0-debian-12-r1
-    container_name: redis-sentinel
-    ports: ["26379:26379"]
-    depends_on:
-      redis-master:
-        condition: service_healthy
-    networks:
-      - turl
+  backend:
+    image: backend:latest
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    environment:
+        NODE_ENV: local
+        PORT: "3000"
+    ports:
+      - "3000:3000"
 networks:
   turl:
     driver: bridge

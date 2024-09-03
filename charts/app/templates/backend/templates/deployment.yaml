@@ -47,7 +47,7 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /api
+              path: /
               port: http
               scheme: HTTP
             initialDelaySeconds: 5
@@ -59,7 +59,7 @@ spec:
             successThreshold: 1
             failureThreshold: 3
             httpGet:
-              path: /api
+              path: /
               port: 3000
               scheme: HTTP
             initialDelaySeconds: 15

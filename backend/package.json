@@ -35,6 +35,7 @@
     "express-prom-bundle": "^7.0.0",
     "helmet": "^7.0.0",
     "ioredis": "^5.4.1",
+    "nanoid": "^5.0.7",
     "nest-winston": "^1.9.4",
     "pg": "^8.11.3",
     "prom-client": "^15.1.0",
@@ -42,6 +43,7 @@
     "rimraf": "^6.0.0",
     "rxjs": "^7.8.0",
     "swagger-ui-express": "^5.0.0",
+    "validator": "^13.12.0",
     "winston": "^3.11.0"
   },
   "devDependencies": {
@@ -49,6 +51,7 @@
     "@types/jest": "^29.0.0",
     "@types/node": "^20.16.3",
     "@types/supertest": "^6.0.0",
+    "@types/validator": "^13.12.1",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.57.0",
