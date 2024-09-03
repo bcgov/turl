@@ -88,6 +88,7 @@ redis:
       storageClass: netapp-block-standard
     persistentVolumeClaimRetentionPolicy:
       enabled: true
+      whenScaled: Delete
       whenDeleted: Delete
     resources:
       limits:
