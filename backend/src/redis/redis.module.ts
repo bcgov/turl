@@ -16,8 +16,12 @@ const redisConnectionFactory: FactoryProvider<Redis> = {
       console.log("Connected to Redis");
     });
     redisInstance.on("error", (err) => {
-      throw new Error(`Error connecting to Redis: ${err}`);
+      console.error(`Error connecting to Redis: ${err}`);
     });
+    redisInstance.on("reconnect", () => {
+     console.log("reconnected");
+    });
+
     return redisInstance;
   },
 };
