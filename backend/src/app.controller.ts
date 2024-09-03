@@ -6,6 +6,7 @@ import {Response} from "express";
 
 @Controller()
 export class AppController {
+  private logger = new Logger("AppController");
   constructor(private readonly appService: AppService) {
   }
 
@@ -43,7 +44,7 @@ export class AppController {
 
   private isValidURL(url: string) {
     const isValidUrl = (url && isURL(url));
-    Logger.debug(`URL ${url} is ${isValidUrl}`);
+    this.logger.debug(`URL ${url} is ${isValidUrl}`);
     return isValidUrl;
   }
 }

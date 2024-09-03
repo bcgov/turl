@@ -2,6 +2,7 @@ import {FactoryProvider, Logger, Module} from "@nestjs/common";
 
 import {Redis} from "ioredis";
 import * as process from "node:process";
+const redisLogger = new Logger("REDIS");
 
 const redisConnectionFactory: FactoryProvider<Redis> = {
   provide: "REDIS",
@@ -18,13 +19,13 @@ const redisConnectionFactory: FactoryProvider<Redis> = {
       });
     }
     redisInstance.on("connect", () => {
-      Logger.log("Connected to Redis");
+      redisLogger.log("Connected to Redis");
     });
     redisInstance.on("error", (err) => {
-      Logger.error(`Error connecting to Redis: ${err}`);
+      redisLogger.error(`Error connecting to Redis: ${err}`);
     });
     redisInstance.on("reconnect", () => {
-      Logger.log("reconnected");
+      redisLogger.log("reconnected");
     });
 
     return redisInstance;
