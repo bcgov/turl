@@ -10,17 +10,8 @@ global:
   tag: ~
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
   autoscaling: false
-  #-- global secrets, can be accessed by sub-charts.
-  secrets:
-    enabled: true
-    databasePassword: ~
-    databaseUser: ~
-    databaseName: ~
-    persist: true
   #-- domain of the application, it is required, apps.silver.devops.gov.bc.ca for silver cluster and apps.devops.gov.bc.ca for gold cluster
   domain: "apps.silver.devops.gov.bc.ca" # it is apps.gold.devops.gov.bc.ca for gold cluster
-  #-- the database Alias gives a nice way to switch to different databases, crunchy, patroni ... etc.
-  databaseAlias: bitnami-pg
 #-- the components of the application, backend.
 backend:
   #-- enable or disable backend
@@ -66,29 +57,7 @@ redis:
     enabled: false
   image:
     registry: artifacts.developer.gov.bc.ca/docker-remote
-  master:
-    kind: StatefulSet
-    shareProcessNamespace: true
-    updateStrategy:
-      type: Recreate
-    podSecurityContext: {}
-    containerSecurityContext: {}
-    persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      size: 100Mi
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-      whenDeleted: Delete
-    resources:
-      limits:
-          cpu: 50m
-          memory: 150Mi
-      requests:
-          cpu: 20m
-          memory: 50Mi
   replica:
-    kind:
     shareProcessNamespace: true
     replicaCount: 2
     persistentVolumeClaimRetentionPolicy:
