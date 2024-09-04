@@ -13,6 +13,7 @@ export class UrlShortenDTO {
     description: "Random 12 character string, if not provided, system will generate it.",
     maxLength: 12,
     minLength: 12,
+    reuired: false
   })
   customUrlCode?: string;
 }
