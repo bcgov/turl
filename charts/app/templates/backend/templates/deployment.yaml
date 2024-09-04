@@ -41,6 +41,8 @@ spec:
               value: info
             - name: REDIS_HOST
               value: {{.Release.Name}}-redis
+            - name: APP_URL
+              value: https://{{ .Release.Name }}-backend.apps.silver.devops.gov.bc.ca/
           ports:
             - name: http
               containerPort: {{ .Values.backend.service.targetPort }}
