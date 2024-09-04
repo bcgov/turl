@@ -1,9 +1,11 @@
 import {HttpException, HttpStatus, Inject, Injectable, OnModuleDestroy} from "@nestjs/common";
 import {Redis} from "ioredis";
+
 @Injectable()
-export class AppService implements OnModuleDestroy{
+export class AppService implements OnModuleDestroy {
   constructor(@Inject("REDIS") private readonly redis: Redis) {
   }
+
   onModuleDestroy(): any {
     this.redis.disconnect();
   }
@@ -12,37 +14,36 @@ export class AppService implements OnModuleDestroy{
     return this.redis.ping();
   }
 
-  async postURLShorten(url: string, customUrlCode:string): Promise<string> {
+  async postURLShorten(url: string, customUrlCode: string): Promise<string> {
     const shortURLFromRedis = await this.redis.get(url);
-    if(shortURLFromRedis && shortURLFromRedis !== customUrlCode) {
-      throw new HttpException("URL already shortened",HttpStatus.CONFLICT);
+    if (shortURLFromRedis && customUrlCode && shortURLFromRedis !== customUrlCode) {
+      throw new HttpException(`URL already shortened with code | ${shortURLFromRedis} |`, HttpStatus.CONFLICT);
     }
-    if(shortURLFromRedis) {
+    if (shortURLFromRedis) {
       return shortURLFromRedis;
     }
-    let shortURL:string;
+    let shortURL: string;
     if (customUrlCode) {
       const existingURL = await this.redis.get(customUrlCode);
-      if(existingURL) {
-        throw new HttpException("Custom URL already exists",HttpStatus.CONFLICT);
+      if (existingURL) {
+        throw new HttpException("Custom URL code is already assigned to a different URL, please use another code or let the system generate for you.", HttpStatus.CONFLICT);
       }
       shortURL = customUrlCode;
-    }else {
-      const { nanoid } = await import('nanoid');
+    } else {
+      const {nanoid} = await import('nanoid');
       shortURL = nanoid(12);
     }
 
     return new Promise((resolve, reject) => {
       this.redis.multi()
         .set(shortURL, url)
-        .set(url, shortURL).
-        exec((err, result) => {
-          if(err) {
-            reject(err);
-          } else {
-            resolve(shortURL);
-          }
-        });
+        .set(url, shortURL).exec((err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(shortURL);
+        }
+      });
     });
   }
 

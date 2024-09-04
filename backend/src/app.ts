@@ -4,7 +4,6 @@ import {AppModule} from './app.module';
 import {NestExpressApplication} from '@nestjs/platform-express';
 import helmet from 'helmet';
 import {metricsMiddleware} from "./prom";
-import * as process from "node:process";
 
 /**
  *
@@ -31,6 +30,7 @@ export async function bootstrap() {
       ""
     )
     .addServer(process.env.APP_URL || "http://localhost:3000/")
+    .addBearerAuth()
     .addTag("turl")
     .build();
 
