@@ -1,0 +1,21 @@
+global:
+  autoscaling: true
+backend:
+  pdb:
+    enabled: true
+  deploymentStrategy: RollingUpdate
+redis:
+  replica:
+    replicaCount: 3
+    persistence:
+      size: 100Mi
+    resources:
+      limits:
+        cpu: 100m
+        memory: 150Mi
+      requests:
+        cpu: 40m
+        memory: 50Mi
+  sentinel:
+    quorum: 2
+
