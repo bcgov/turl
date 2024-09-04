@@ -2,9 +2,9 @@ import {Body, Controller, Get, HttpException, HttpStatus, Logger, Param, Post, R
 import {AppService} from './app.service';
 import {UrlShortenDTO} from "./dto/url.shorten";
 import {Response} from "express";
-import * as process from "node:process";
-import {ApiExcludeEndpoint} from "@nestjs/swagger";
+import {ApiExcludeEndpoint, ApiTags} from "@nestjs/swagger";
 import {escape, isAlphanumeric, isURL} from "validator";
+@ApiTags('turl')
 @Controller()
 export class AppController {
   private logger = new Logger("AppController");
