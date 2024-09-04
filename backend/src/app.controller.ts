@@ -3,10 +3,12 @@ import {AppService} from './app.service';
 import {UrlShortenDTO} from "./dto/url.shorten";
 import isURL from 'validator/lib/isURL';
 import {Response} from "express";
+import * as process from "node:process";
 
 @Controller()
 export class AppController {
   private logger = new Logger("AppController");
+
   constructor(private readonly appService: AppService) {
   }
 
@@ -30,8 +32,12 @@ export class AppController {
     if (!this.isValidURL(urlShortenDTO.url)) {
       throw new HttpException("Invalid URL", HttpStatus.BAD_REQUEST);
     }
+    if (urlShortenDTO.customUrlCode && urlShortenDTO.customUrlCode.length != 12) {
+      throw new HttpException("Custom URL code too long", HttpStatus.BAD_REQUEST);
+    }
     try {
-      return await this.appService.postURLShorten(urlShortenDTO.url);
+      const shortUrlCode = await this.appService.postURLShorten(urlShortenDTO.url, urlShortenDTO.customUrlCode);
+      return (process.env.APP_URL || 'http://localhost:3000/') + shortUrlCode;
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
