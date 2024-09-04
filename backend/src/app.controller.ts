@@ -1,17 +1,17 @@
 import {Body, Controller, Get, HttpException, HttpStatus, Logger, Param, Post, Res} from '@nestjs/common';
 import {AppService} from './app.service';
 import {UrlShortenDTO} from "./dto/url.shorten";
-import isURL from 'validator/lib/isURL';
 import {Response} from "express";
 import * as process from "node:process";
 import {ApiExcludeEndpoint} from "@nestjs/swagger";
+import {escape, isAlphanumeric, isURL} from "validator";
 @Controller()
 export class AppController {
   private logger = new Logger("AppController");
 
   constructor(private readonly appService: AppService) {
   }
-  
+
   @ApiExcludeEndpoint()
   @Get()
   async getHello(): Promise<string> {
@@ -33,12 +33,12 @@ export class AppController {
     if (!this.isValidURL(urlShortenDTO.url)) {
       throw new HttpException("Invalid URL", HttpStatus.BAD_REQUEST);
     }
-    if (urlShortenDTO.customUrlCode && urlShortenDTO.customUrlCode.length != 12) {
-      throw new HttpException("Custom URL code too long", HttpStatus.BAD_REQUEST);
+    if (urlShortenDTO.customUrlCode && urlShortenDTO.customUrlCode.length != 12 && !isAlphanumeric(urlShortenDTO.customUrlCode)) {
+      throw new HttpException("Custom URL code is not 12 characters alphanumeric", HttpStatus.BAD_REQUEST);
     }
     try {
       const shortUrlCode = await this.appService.postURLShorten(urlShortenDTO.url, urlShortenDTO.customUrlCode);
-      return (process.env.APP_URL || 'http://localhost:3000/') + shortUrlCode;
+      return (process.env.APP_URL || 'http://localhost:3000/') + escape(shortUrlCode);
     } catch (e) {
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,

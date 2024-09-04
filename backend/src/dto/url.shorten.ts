@@ -9,8 +9,8 @@ export class UrlShortenDTO {
   })
   url: string;
   @ApiProperty({
-    example: "W0jsiQdywoj",
-    description: "Random 12 character string, if not provided, system will generate it.",
+    example: "W0jsiQdywoj2",
+    description: "Random AlphaNumeric, 12 character string, if not provided, system will generate it.",
     maxLength: 12,
     minLength: 12,
     required: false

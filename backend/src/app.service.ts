@@ -14,6 +14,9 @@ export class AppService implements OnModuleDestroy{
 
   async postURLShorten(url: string, customUrlCode:string): Promise<string> {
     const shortURLFromRedis = await this.redis.get(url);
+    if(shortURLFromRedis && shortURLFromRedis !== customUrlCode) {
+      throw new HttpException("URL already shortened",HttpStatus.CONFLICT);
+    }
     if(shortURLFromRedis) {
       return shortURLFromRedis;
     }
