@@ -5,6 +5,7 @@ import {Response} from "express";
 import {ApiBearerAuth, ApiExcludeEndpoint, ApiTags} from "@nestjs/swagger";
 import {escape, isAlphanumeric, isBefore, isURL} from "validator";
 import jsonwebtoken, {JwtPayload} from "jsonwebtoken";
+import {URL} from "node:url";
 
 @ApiTags('turl')
 @Controller()
@@ -40,8 +41,14 @@ export class AppController {
       // split the authorization header and get the jwt token
       const jwtFromHeader = headers['authorization'].split(' ')[1];
       const jwt: JwtPayload = jsonwebtoken.decode(jwtFromHeader) as JwtPayload;
-      if (!jwt || !jwt.iss || !jwt.iss.startsWith('https://loginproxy.gov.bc.ca') || isBefore(new Date(jwt.exp*1000).toISOString())) {
+      if (!jwt || !jwt.iss || isBefore(new Date(jwt.exp * 1000).toISOString())) {
         throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
+      } else {
+        const allowedIssuer = "loginproxy.gov.bc.ca";
+        const issuer = new URL(jwt.iss).host;
+        if (issuer !== allowedIssuer) {
+          throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
       }
     }
 
