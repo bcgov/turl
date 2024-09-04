@@ -7,13 +7,16 @@ export class HTTPLoggerMiddleware implements NestMiddleware {
 
   use(request: Request, response: Response, next: NextFunction): void {
     const { method, originalUrl } = request;
+    const start = Date.now();
+
 
     response.on("finish", () => {
       const { statusCode } = response;
       const contentLength = response.get("content-length") || '-';
-      const hostedHttpLogFormat = `${method} ${originalUrl} ${statusCode} ${contentLength} - ${request.get(
-        "user-agent"
-      )}`;
+      const timeTaken = Date.now() - start;
+      const hostedHttpLogFormat = `${method} | ${originalUrl} | ${statusCode} | ${contentLength} | ${request.get(
+        "user-agent")} | ${timeTaken}ms`;
+
       this.logger.log(hostedHttpLogFormat);
     });
     next();
