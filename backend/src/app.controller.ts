@@ -1,9 +1,11 @@
-import {Body, Controller, Get, HttpException, HttpStatus, Logger, Param, Post, Res} from '@nestjs/common';
+import {Body, Controller, Get, Headers, HttpException, HttpStatus, Logger, Param, Post, Res} from '@nestjs/common';
 import {AppService} from './app.service';
 import {UrlShortenDTO} from "./dto/url.shorten";
 import {Response} from "express";
-import {ApiExcludeEndpoint, ApiTags} from "@nestjs/swagger";
-import {escape, isAlphanumeric, isURL} from "validator";
+import {ApiBearerAuth, ApiExcludeEndpoint, ApiTags} from "@nestjs/swagger";
+import {escape, isAlphanumeric, isBefore, isURL} from "validator";
+import jsonwebtoken, {JwtPayload} from "jsonwebtoken";
+
 @ApiTags('turl')
 @Controller()
 export class AppController {
@@ -29,7 +31,21 @@ export class AppController {
   }
 
   @Post()
-  async postUrlShorten(@Body() urlShortenDTO: UrlShortenDTO): Promise<string> {
+  @ApiBearerAuth()
+  async postUrlShorten(@Body() urlShortenDTO: UrlShortenDTO, @Headers() headers: any): Promise<string> {
+    if (process.env.AUTH_ENABLED) {
+      if (!headers['authorization']) {
+        throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
+      }
+      // split the authorization header and get the jwt token
+      const jwtFromHeader = headers['authorization'].split(' ')[1];
+      const jwt: JwtPayload = jsonwebtoken.decode(jwtFromHeader) as JwtPayload;
+      if (!jwt || !jwt.iss || !jwt.iss.startsWith('https://loginproxy.gov.bc.ca') || isBefore(new Date(jwt.exp*1000).toISOString())) {
+        throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
+      }
+    }
+
+
     if (!this.isValidURL(urlShortenDTO.url)) {
       throw new HttpException("Invalid URL", HttpStatus.BAD_REQUEST);
     }
@@ -40,6 +56,10 @@ export class AppController {
       const shortUrlCode = await this.appService.postURLShorten(urlShortenDTO.url, urlShortenDTO.customUrlCode);
       return (process.env.APP_URL || 'http://localhost:3000/') + escape(shortUrlCode);
     } catch (e) {
+      // check if http exception then simply throw it
+      if (e instanceof HttpException) {
+        throw e;
+      }
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         error: 'This is a custom message',
