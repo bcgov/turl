@@ -4,14 +4,15 @@ import {UrlShortenDTO} from "./dto/url.shorten";
 import isURL from 'validator/lib/isURL';
 import {Response} from "express";
 import * as process from "node:process";
-
+import {ApiExcludeEndpoint} from "@nestjs/swagger";
 @Controller()
 export class AppController {
   private logger = new Logger("AppController");
 
   constructor(private readonly appService: AppService) {
   }
-
+  
+  @ApiExcludeEndpoint()
   @Get()
   async getHello(): Promise<string> {
     return this.appService.getHello();
