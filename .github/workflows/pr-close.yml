@@ -12,10 +12,17 @@ concurrency:
 jobs:
   cleanup:
     name: Cleanup and Images
-    uses: bcgov/quickstart-openshift-helpers/.github/workflows/.pr-close.yml@v0.6.1
+    uses: bcgov/quickstart-openshift-helpers/.github/workflows/.pr-close.yml@main
     secrets:
       oc_namespace: ${{ secrets.OC_NAMESPACE }}
       oc_token: ${{ secrets.OC_TOKEN }}
     with:
       cleanup: helm
       packages: backend
+      remove_pvc: |
+        redis-data-${{ github.event.repository.name }}-${{ github.event.number }}-redis-node-0,
+        redis-data-${{ github.event.repository.name }}-${{ github.event.number }}-redis-node-1,
+        redis-data-${{ github.event.repository.name }}-${{ github.event.number }}-redis-node-2,
+        sentinel-data-${{ github.event.repository.name }}-${{ github.event.number }}-redis-node-0,
+        sentinel-data-${{ github.event.repository.name }}-${{ github.event.number }}-redis-node-1,
+        sentinel-data-${{ github.event.repository.name }}-${{ github.event.number }}-redis-node-2
